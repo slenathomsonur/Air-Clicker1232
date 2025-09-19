@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker with Admin</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', Arial, sans-serif;
+            background-color: #f0e4d7;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        #gameContainer {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+        #cookieArea {
+            flex: 1;
+            text-align: center;
+        }
+        #cookie {
+            width: 250px;
+            height: 250px;
+            background-color: #d2691e;
+            border: 5px solid #8b4513;
+            border-radius: 50%;
+            cursor: pointer;
+            margin: 0 auto;
+            font-size: 100px;
+            line-height: 250px;
+            text-align: center;
+            transition: transform 0.1s;
+        }
+        #cookie:hover {
+            transform: scale(1.05);
+        }
+        #cookie:active {
+            transform: scale(0.95);
+        }
+        #stats {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #cps {
+            font-size: 16px;
+            color: #666;
+        }
+        #upgrades {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .upgrade {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .upgrade:hover {
+            background-color: #f0f0f0;
+        }
+        .upgrade.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .upgrade.admin {
+            background-color: #ffeb3b;
+            border-color: #ffc107;
+        }
+        #console {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000;
+            color: #00ff00;
+            font-family: monospace;
+            height: 100px;
+            overflow-y: scroll;
+        }
+        #adminPanel {
+            display: none;
+            background-color: #e8f5e8;
+            padding: 10px;
+            border: 1px solid #4caf50;
+            margin-top: 10px;
+        }
+        #devConsole {
+            display: none;
+            background-color: #1e1e1e;
+            color: #fff;
+            padding: 10px;
+            border: 1px solid #ff5722;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+        #devConsole input {
+            width: 80%;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 5px;
+        }
+        #achievements {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="cookieArea">
+            <h1>Cookie Clicker</h1>
+            <div id="stats">Cookies: <span id="cookies">0</span></div>
+            <div id="cps">Cookies per second: <span id="cookiesPerSecond">0</span></div>
+            <div id="cookie" onclick="clickCookie()">🍪</div>
+            <div id="achievements">
+                <h3>Achievements</h3>
+                <ul id="achList"></ul>
+            </div>
+        </div>
+        <div id="upgrades">
+            <h3>Upgrades</h3>
+            <div id="upgradeList"></div>
+            <div id="adminPanel">
+                <h4>Admin Panel</h4>
+                <p>Infinite cookies activated!</p>
+                <button onclick="toggleInfinite()">Toggle Infinite Cookies</button>
+                <button onclick="unlockAllAchievements()">Unlock All Achievements</button>
+            </div>
+            <div id="devConsole">
+                <h4>Developer Console</h4>
+                <p>Type commands (e.g., 'addCookies 1000', 'unlockAll', 'setCps 50')</p>
+                <input type="text" id="devInput" placeholder="Enter command..." onkeypress="handleDevCommand(event)">
+            </div>
+            <div id="console"></div>
+            <input type="text" id="cheatInput" placeholder="Enter cheat code..." onkeypress="handleCheat(event)">
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let cookies = 0;
+        let
